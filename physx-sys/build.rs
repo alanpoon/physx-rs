@@ -265,7 +265,7 @@ fn add_common(ctx: &mut Context) {
         let ndk_toolchain = match host_str {
             "x86_64-pc-windows-msvc" => "windows-x86_64",
             "x86_64-unknown-linux-gnu" => "linux-x86_64",
-            "x86_64-apple-darwin" => "darwin-x86_64",
+            "x86_64-apple-darwin" | "aarch64-apple-darwin" => "darwin-x86_64",
             _ => panic!(
                 "Host triple {} is unsupported for cross-compilation to Android",
                 host_str
@@ -327,7 +327,7 @@ fn add_common(ctx: &mut Context) {
     // compiler detection, as macos uses cc still, but it's actually a symlink
     // to clang++, but that means that cc rs will by default think the compiler
     // is gcc
-    if (ccenv.host.contains("-linux-") || ccenv.host == "x86_64-apple-darwin")
+    if (ccenv.host.contains("-linux-") || ccenv.host == "x86_64-apple-darwin" || ccenv.host  =="aarch64-apple-darwin" || ccenv.host  =="aarch64-apple-ios")
         && ccenv.target_compiler.is_none()
     {
         builder.compiler("clang++");
@@ -604,6 +604,8 @@ fn main() {
             | "x86_64-pc-windows-msvc"
             | "aarch64-linux-android"
             | "aarch64-unknown-linux-gnu"
+            | "aarch64-apple-ios"
+            | "aarch64-apple-ios-sim"
             | "aarch64-apple-darwin" => {
                 include.push(target);
             }
@@ -622,7 +624,7 @@ fn main() {
     // which from cursory glance seems to be an erroneous warning as the type it is talking
     // about is inside a struct containing a single u16, so....
     if physx_cc.get_compiler().is_like_gnu() {
-        physx_cc.flag("-Wno-stringop-overflow");
+        //physx_cc.flag("-Wno-stringop-overflow");
     }
 
     physx_cc

@@ -252,6 +252,20 @@ include!("generated/aarch64-apple-darwin/structgen.rs");
 
 #[cfg(all(
     not(feature = "structgen"),
+    target_os = "ios",
+    target_arch = "aarch64",
+))]
+include!("generated/aarch64-apple-ios/structgen.rs");
+
+#[cfg(all(
+    not(feature = "structgen"),
+    target_os = "ios-sim",
+    target_arch = "aarch64",
+))]
+include!("generated/aarch64-apple-ios-sim/structgen.rs");
+
+#[cfg(all(
+    not(feature = "structgen"),
     target_os = "windows",
     target_arch = "x86_64",
     target_env = "msvc",
